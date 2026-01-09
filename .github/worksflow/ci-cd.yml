@@ -1,27 +1,30 @@
-name: Simple CI/CD for Hasoo Solutions
+name: CI-CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
+    - name: Checkout Code
       uses: actions/checkout@v3
-    
-    - name: Verify index.html
-      run: |
-        echo "Verifying Hasoo Solutions website..."
-        echo "Checking index.html..."
-        ls -la index.html
-        echo "File type:"
-        file index.html
-        
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./
+        node-version: 18
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Run Tests
+      run: npm test
+
+    - name: Build Docker Image
+      run: docker build -t cloud .
+
+    - name: Run Docker Container
+      run: docker run -d -p 3000:3000 cloud
