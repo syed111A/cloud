@@ -1,5 +1,5 @@
 const express = require('express');
-const donors = require('./donors');
+const recepients = require('./recepients');
 const app = express();
 
 // Serve static HTML files
@@ -11,9 +11,9 @@ app.get('/health', (req, res) => {
 });
 
 // Show all donors
-app.get('/donors', (req, res) => {
-  console.log("Donors endpoint called"); // log to console
-  res.json(donors);
+app.get('/recepients', (req, res) => {
+  console.log("recepients endpoint called"); // log to console
+  res.json(recepients);
 });
 
 app.listen(3000, () => {
